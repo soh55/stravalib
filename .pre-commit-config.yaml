@@ -10,6 +10,7 @@
 #
 # - Run on all files:   pre-commit run --all-files
 # - Register git hooks: pre-commit install --install-hooks
+# - Run a specific hook on all files: pre-commit run codespell --all-files
 
 ci:
     autofix_prs: false
@@ -17,14 +18,14 @@ ci:
       '[pre-commit.ci 🤖] Apply code format tools to PR'
     autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
     # Update hook versions every quarter (so we don't get hit with weekly update pr's)
-    autoupdate_schedule: weekly
+    autoupdate_schedule: quarterly
     autoupdate_branch: ""
 
 default_stages: [commit]
 repos:
   # Misc commit checks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     # ref: https://github.com/pre-commit/pre-commit-hooks#hooks-available
     hooks:
       # Autoformat: Makes sure files end in a newline and only a newline.
@@ -36,14 +37,14 @@ repos:
 
   # Linting code using ruff
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.286
+    rev: v0.1.9
     hooks:
     - id: ruff
       args: [--fix, --exit-non-zero-on-fix]
 
   # Black for auto code formatting
   - repo: https://github.com/psf/black
-    rev: 23.7.0
+    rev: 23.12.1
     hooks:
       - id: black
         entry: bash -c 'black "$@"; git add -u' --
@@ -56,8 +57,9 @@ repos:
       - id: blacken-docs
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.5
+    rev: v2.2.6
     hooks:
       - id: codespell
+        files: ^.*\.(py|md|rst)$
         additional_dependencies:
           - tomli
