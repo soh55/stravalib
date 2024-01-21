@@ -4,7 +4,15 @@ from typing import List, Optional
 import pint
 import pytest
 import pytz
-from pydantic.v1 import BaseModel
+
+from stravalib.pydantic_version import pydantic_major_version
+if pydantic_major_version == '2':
+    try:
+        from pydantic.v1 import BaseModel
+    except ImportError:
+        raise ImportError("pydantic.v1 module not found. You might be using an unsupported version of Pydantic.")
+elif pydantic_major_version == '1':
+    from pydantic import BaseModel
 
 from stravalib import model
 from stravalib import unithelper as uh
